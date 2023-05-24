@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lib-v1
+  labels: { app: lib, version: v1 }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: lib, version: v1 }
+  template:
+    metadata:
+      labels: { app: lib, version: v1 }
+    spec:
+      containers:
+      - name: lib
+        image: proksch/istio-example-lib:0.0.1
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lib
+  labels:
+    app: lib
+    service: lib
+spec:
+  selector:
+    app: lib
+  ports:
+    - name: http-myport
+      port: 1234
+      targetPort: 8080
+
